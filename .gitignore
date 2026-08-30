@@ -47,3 +47,5 @@ tmp/
 
 .vercel
 .env*
+
+build_loc*.txt
