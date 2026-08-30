@@ -9,9 +9,13 @@ const TURSO_TOKEN = (process.env.TURSO_AUTH_TOKEN || "").trim();
 
 export const isCloud = TURSO_URL.startsWith("http") || TURSO_URL.startsWith("libsql");
 
+// No servidorless (Vercel) o filesystem é somente-leitura e não há arquivo local.
+// Só trabalha com o disco quando não está no modo nuvem.
 const dataDir = path.join(process.cwd(), "data");
-fs.mkdirSync(dataDir, { recursive: true });
-export const dbPath = path.join(dataDir, "blessed.db");
+if (!isCloud) {
+  fs.mkdirSync(dataDir, { recursive: true });
+}
+export const dbPath = isCloud ? "" : path.join(dataDir, "blessed.db");
 
 const client: Client = isCloud
   ? createClient({ url: TURSO_URL, authToken: TURSO_TOKEN })
