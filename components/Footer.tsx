@@ -37,19 +37,18 @@ export default async function Footer() {
           </p>
         </div>
 
-        <div>
+<div>
           <div style={{ fontWeight: 700, marginBottom: "10px" }}>Atendimento</div>
           <p style={{ opacity: 0.8, fontSize: "0.92rem", lineHeight: 1.8 }}>
-            Enviamos para todo o Brasil<br />
-            Segunda a sábado, 9h às 18h
+            Enviamos em todos os dias úteis<br />
+            das 9 às 19
           </p>
         </div>
 
         <div>
           <div style={{ fontWeight: 700, marginBottom: "10px" }}>Formas de pagamento</div>
           <p style={{ opacity: 0.8, fontSize: "0.92rem", lineHeight: 1.8 }}>
-            PIX · Cartão de crédito<br />
-            Boleto
+            PIX · Cartão de crédito e débito
           </p>
         </div>
       </div>

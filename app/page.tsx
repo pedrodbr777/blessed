@@ -49,7 +49,6 @@ export default async function Home() {
               { icon: "🚚", titulo: "Envio para todo Brasil", desc: "Entrega segura e rápida" },
               { icon: "🧵", titulo: "Qualidade premium", desc: "Materiais selecionados" },
               { icon: "🔁", titulo: "Troca fácil", desc: "Até 7 dias após receber" },
-              { icon: "💬", titulo: "Atendimento dedicado", desc: "Suporte pelo WhatsApp" },
             ].map((d) => (
               <div
                 key={d.titulo}
