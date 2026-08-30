@@ -124,10 +124,31 @@ button {
 
 /* ============ HERO / BANNER ============ */
 .hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  padding: 80px 20px;
+  overflow: hidden;
+  text-align: center;
   background: linear-gradient(135deg, var(--cor-principal) 0%, #1f1c14 100%);
   color: var(--cor-texto-claro);
-  padding: 90px 20px;
-  text-align: center;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at center, rgba(10,10,10,0) 45%, rgba(10,10,10,0.5) 100%),
+    linear-gradient(180deg, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.62) 100%);
+  pointer-events: none;
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero-titulo {
@@ -136,13 +157,15 @@ button {
   letter-spacing: 0.12em;
   color: var(--cor-destaque);
   margin-bottom: 18px;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.45);
 }
 
 .hero-slogan {
   font-size: clamp(1.1rem, 3vw, 1.5rem);
-  opacity: 0.9;
+  opacity: 0.95;
   max-width: 640px;
-  margin: 0 auto 30px;
+  margin: 0 auto 32px;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.5);
 }
 
 .hero-botao {
@@ -150,9 +173,10 @@ button {
   background: var(--cor-destaque);
   color: #111;
   font-weight: 700;
-  padding: 14px 32px;
+  padding: 14px 34px;
   border-radius: 40px;
   letter-spacing: 0.05em;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
@@ -234,7 +258,11 @@ button {
     letter-spacing: 0.25em;
   }
   .hero {
-    padding: 60px 20px;
+    min-height: 380px;
+    padding: 60px 18px;
+  }
+  .hero-titulo {
+    letter-spacing: 0.06em;
   }
   .secao {
     padding: 50px 0;
