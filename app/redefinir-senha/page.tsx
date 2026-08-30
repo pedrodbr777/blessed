@@ -7,9 +7,11 @@ import { getUsuarioAtual } from "@/lib/auth";
 export const dynamic = "force-dynamic";
 
 export default async function RedefinirSenhaPage({
+  params,
   searchParams,
 }: {
-  searchParams: { token?: string };
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<{ token?: string }>;
 }) {
   const config = await getSiteConfig();
   const usuario = await getUsuarioAtual();
@@ -17,7 +19,8 @@ export default async function RedefinirSenhaPage({
     redirect("/minha-conta");
   }
 
-  if (!searchParams.token) {
+  const sp = await searchParams;
+  if (!sp.token) {
     redirect("/esqueci-senha");
   }
 
@@ -27,7 +30,7 @@ export default async function RedefinirSenhaPage({
       <section className="secao" style={{ minHeight: "70vh" }}>
         <div className="container" style={{ maxWidth: "420px" }}>
           <h2 className="secao-titulo">Redefinir senha</h2>
-          <RedefinirSenhaForm token={searchParams.token} />
+          <RedefinirSenhaForm token={sp.token} />
         </div>
       </section>
     </>
