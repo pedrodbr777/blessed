@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import RedefinirSenhaForm from "@/components/RedefinirSenhaForm";
 import { getSiteConfig } from "@/lib/config";
@@ -26,7 +26,7 @@ export default async function RedefinirSenhaPage({
 
   return (
     <>
-      <Navbar titulo={config.tituloSite} corDestaque={config.corDestaque} />
+      <Navbar titulo={config.tituloSite} corDestaque={config.corDestaque} logo={config.logoImagem} />
       <section className="secao" style={{ minHeight: "70vh" }}>
         <div className="container" style={{ maxWidth: "420px" }}>
           <h2 className="secao-titulo">Redefinir senha</h2>

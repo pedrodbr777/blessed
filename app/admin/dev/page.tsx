@@ -1,7 +1,8 @@
-import { getSiteConfig } from "@/lib/config";
+﻿import { getSiteConfig } from "@/lib/config";
 import { salvarConfig } from "@/lib/acoesConfig";
 import { exigeNivel } from "@/lib/protecao";
 import BannerUpload from "@/components/BannerUpload";
+import LogoUpload from "@/components/LogoUpload";
 import { list } from "@vercel/blob";
 import fs from "node:fs";
 import path from "node:path";
@@ -20,6 +21,14 @@ const inputStyle: React.CSSProperties = {
   border: "1px solid #ddd",
   fontSize: "0.95rem",
   width: "100%",
+};
+
+const corStyle: React.CSSProperties = {
+  width: "80px",
+  height: "44px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  padding: "4px",
 };
 
 const campoStyle: React.CSSProperties = {
@@ -73,17 +82,40 @@ export default async function DevPage() {
           gap: "18px",
         }}
       >
-        {/* Cores */}
-        <div style={campoStyle}>
-          <span style={labelStyle}>Cor principal (fundo escuro)</span>
-          <input name="cor_principal" type="color" defaultValue={config.corPrincipal} style={{ width: "80px", height: "44px", border: "1px solid #ddd", borderRadius: "8px", padding: "4px" }} />
-        </div>
-        <div style={campoStyle}>
-          <span style={labelStyle}>Cor de destaque (dourado)</span>
-          <input name="cor_destaque" type="color" defaultValue={config.corDestaque} style={{ width: "80px", height: "44px", border: "1px solid #ddd", borderRadius: "8px", padding: "4px" }} />
+        <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
+          <span style={labelStyle}>Logo da marca (aparece no topo do site)</span>
+          <LogoUpload logoAtual={config.logoImagem} />
         </div>
 
-        {/* Textos */}
+        <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
+          <span style={{ ...labelStyle, fontSize: "1rem", color: "#333", borderTop: "1px solid #eee", paddingTop: "10px" }}>Cores do site</span>
+        </div>
+
+        <div style={campoStyle}>
+          <span style={labelStyle}>Cor principal (menu de cima)</span>
+          <input name="cor_principal" type="color" defaultValue={config.corPrincipal} style={corStyle} />
+        </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Cor de destaque (botões, dourado)</span>
+          <input name="cor_destaque" type="color" defaultValue={config.corDestaque} style={corStyle} />
+        </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Cor de fundo da página</span>
+          <input name="cor_fundo" type="color" defaultValue={config.corFundo} style={corStyle} />
+        </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Cor do texto</span>
+          <input name="cor_texto" type="color" defaultValue={config.corTexto} style={corStyle} />
+        </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Cor do texto claro (no menu escuro)</span>
+          <input name="cor_texto_claro" type="color" defaultValue={config.corTextoClaro} style={corStyle} />
+        </div>
+
+        <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
+          <span style={{ ...labelStyle, fontSize: "1rem", color: "#333", borderTop: "1px solid #eee", paddingTop: "10px" }}>Textos do site</span>
+        </div>
+
         <div style={campoStyle}>
           <span style={labelStyle}>Título do site (logo)</span>
           <input name="titulo_site" defaultValue={config.tituloSite} style={inputStyle} />
@@ -92,8 +124,23 @@ export default async function DevPage() {
           <span style={labelStyle}>Slogan</span>
           <input name="slogan" defaultValue={config.slogan} style={inputStyle} />
         </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Título da página de loja</span>
+          <input name="titulo_loja" defaultValue={config.tituloLoja} style={inputStyle} />
+        </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Subtítulo da página de loja</span>
+          <input name="subtitulo_loja" defaultValue={config.subtituloLoja} style={inputStyle} />
+        </div>
+        <div style={campoStyle}>
+          <span style={labelStyle}>Texto do rodapé</span>
+          <input name="rodape_texto" defaultValue={config.rodapeTexto} style={inputStyle} />
+        </div>
 
-        {/* Banner */}
+        <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
+          <span style={{ ...labelStyle, fontSize: "1rem", color: "#333", borderTop: "1px solid #eee", paddingTop: "10px" }}>Banner da página inicial</span>
+        </div>
+
         <div style={campoStyle}>
           <span style={labelStyle}>Imagem do banner (salva no banco)</span>
           <BannerUpload />
@@ -128,7 +175,6 @@ export default async function DevPage() {
         </button>
       </form>
 
-      {/* Imagens salvas */}
       <div
         style={{
           background: "#fff",

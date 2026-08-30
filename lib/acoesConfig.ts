@@ -1,4 +1,4 @@
-"use server";
+﻿"use server";
 
 import { revalidatePath } from "next/cache";
 import { db } from "@/lib/db";
@@ -7,8 +7,15 @@ import { exigeNivel } from "@/lib/protecao";
 const CHAVES = [
   "cor_principal",
   "cor_destaque",
+  "cor_fundo",
+  "cor_texto",
+  "cor_texto_claro",
   "titulo_site",
   "slogan",
+  "titulo_loja",
+  "subtitulo_loja",
+  "rodape_texto",
+  "logo_imagem",
   "banner_imagem",
   "banner_texto",
   "banner_link",
@@ -28,6 +35,7 @@ export async function salvarConfig(formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/produtos");
   revalidatePath("/admin/dev");
 }
 

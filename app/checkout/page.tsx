@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import CheckoutPage from "@/components/CheckoutPage";
 import { getSiteConfig } from "@/lib/config";
@@ -18,7 +18,7 @@ export default async function Checkout() {
 
   return (
     <>
-      <Navbar titulo={config.tituloSite} corDestaque={config.corDestaque} usuarioNome={usuario.nome} usuarioNivel={usuario.nivel} />
+      <Navbar titulo={config.tituloSite} corDestaque={config.corDestaque} logo={config.logoImagem} usuarioNome={usuario.nome} usuarioNivel={usuario.nivel} />
       <CheckoutPage config={config} pagamentoAtivo={pagamentoAtivo} />
     </>
   );

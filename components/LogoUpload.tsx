@@ -4,16 +4,15 @@ import { useRef, useState } from "react";
 import EditorImagem from "@/components/EditorImagem";
 
 interface Props {
-  valorInicial?: string;
-  campo?: string;
+  logoAtual?: string;
 }
 
-export default function SeletorFoto({ valorInicial = "", campo = "imagem" }: Props) {
+export default function LogoUpload({ logoAtual = "" }: Props) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [url, setUrl] = useState(valorInicial);
+  const [logo, setLogo] = useState(logoAtual);
+  const [arquivoEditar, setArquivoEditar] = useState<File | null>(null);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
-  const [arquivoEditar, setArquivoEditar] = useState<File | null>(null);
 
   function handleFile(file: File | undefined) {
     if (!file) return;
@@ -22,21 +21,28 @@ export default function SeletorFoto({ valorInicial = "", campo = "imagem" }: Pro
 
   async function enviarBlob(blob: Blob) {
     setArquivoEditar(null);
-    setErro("");
     setEnviando(true);
+    setErro("");
     try {
       const formData = new FormData();
-      const nome = `recorte-${Date.now()}.jpg`;
-      formData.append("arquivo", new File([blob], nome, { type: "image/jpeg" }));
+      const nome = `logo-${Date.now()}.png`;
+      formData.append("arquivo", new File([blob], nome, { type: "image/png" }));
       const res = await fetch("/api/upload", { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) {
-        setErro(data.erro || "Falha ao enviar.");
+        setErro(data.erro || "Falha ao enviar a logo.");
         return;
       }
-      setUrl(data.url);
+      setLogo(data.url);
+      const ups = new FormData();
+      ups.append("logo_imagem", data.url);
+      const r2 = await fetch("/api/dev/logo", { method: "POST", body: ups });
+      if (!r2.ok) {
+        const d2 = await r2.json().catch(() => ({}));
+        setErro(d2.erro || "Logo enviada, mas não foi salva no site.");
+      }
     } catch {
-      setErro("Erro ao enviar a foto.");
+      setErro("Erro ao enviar a logo.");
     } finally {
       setEnviando(false);
     }
@@ -44,7 +50,7 @@ export default function SeletorFoto({ valorInicial = "", campo = "imagem" }: Pro
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <input type="hidden" name={campo} value={url} />
+      <input type="hidden" name="logo_imagem" value={logo} />
       <input
         ref={inputRef}
         type="file"
@@ -66,32 +72,29 @@ export default function SeletorFoto({ valorInicial = "", campo = "imagem" }: Pro
           textAlign: "center",
         }}
       >
-        {enviando ? "Enviando foto..." : "📁 Selecione a foto (para recortar)"}
+        {enviando ? "Salvando logo..." : "🖼️ Enviar logo da marca"}
       </button>
 
-      {url && (
-        <div style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+      {logo ? (
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <img
-            src={url}
-            alt="foto do produto"
-            style={{ width: "56px", height: "56px", objectFit: "cover", borderRadius: "8px", border: "1px solid #ddd" }}
+            src={logo}
+            alt="logo da marca"
+            style={{
+              height: "44px",
+              maxWidth: "160px",
+              objectFit: "contain",
+              background: "#0f0f0f",
+              borderRadius: "8px",
+              padding: "4px",
+            }}
           />
-          {url.startsWith("/uploads/") ? (
-            <span style={{ fontSize: "0.8rem", color: "#1a7f37" }}>Foto enviada do computador ✓</span>
-          ) : (
-            <code
-              style={{
-                fontSize: "0.78rem",
-                background: "#f0f0f0",
-                padding: "6px 8px",
-                borderRadius: "6px",
-                wordBreak: "break-all",
-              }}
-            >
-              {url}
-            </code>
-          )}
+          <span style={{ fontSize: "0.8rem", color: "#1a7f37" }}>Logo da marca ✓</span>
         </div>
+      ) : (
+        <span style={{ fontSize: "0.8rem", color: "#aaa" }}>
+          Nenhuma logo definida. Ao enviar, ela aparece no topo do site.
+        </span>
       )}
 
       {erro && <div style={{ color: "#c0392b", fontSize: "0.85rem" }}>{erro}</div>}
@@ -101,7 +104,7 @@ export default function SeletorFoto({ valorInicial = "", campo = "imagem" }: Pro
           arquivo={arquivoEditar}
           onCancelar={() => setArquivoEditar(null)}
           onSalvar={enviarBlob}
-          rotulo="Recortar foto do produto"
+          rotulo="Ajustar a logo da marca"
         />
       )}
     </div>

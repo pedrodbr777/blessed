@@ -1,4 +1,4 @@
-import { getSiteConfig } from "@/lib/config";
+﻿import { getSiteConfig } from "@/lib/config";
 
 export default async function Footer() {
   const config = await getSiteConfig();
@@ -7,7 +7,7 @@ export default async function Footer() {
     <footer
       style={{
         background: config.corPrincipal,
-        color: "#fff",
+        color: config.corTextoClaro,
         padding: "50px 20px 30px",
         marginTop: "60px",
       }}
@@ -58,7 +58,7 @@ export default async function Footer() {
         className="container"
         style={{ borderTop: "1px solid rgba(255,255,255,0.15)", marginTop: "30px", paddingTop: "20px", textAlign: "center", opacity: 0.6 }}
       >
-        © {new Date().getFullYear()} {config.tituloSite} — Todos os direitos reservados.
+        {config.rodapeTexto}
       </div>
     </footer>
   );

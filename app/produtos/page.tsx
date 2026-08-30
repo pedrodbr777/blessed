@@ -1,4 +1,4 @@
-import Navbar from "@/components/Navbar";
+﻿import Navbar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import { db } from "@/lib/db";
 import { getSiteConfig } from "@/lib/config";
@@ -35,13 +35,14 @@ export default async function ProductsPage() {
       <Navbar
         titulo={config.tituloSite}
         corDestaque={config.corDestaque}
+        logo={config.logoImagem} 
         usuarioNome={usuario?.nome}
         usuarioNivel={usuario?.nivel}
       />
       <section className="secao">
-        <div className="container">
-          <h2 className="secao-titulo">Nossa Loja</h2>
-          <p className="secao-sub">Escolha a peça que combina com você</p>
+<div className="container">
+          <h2 className="secao-titulo">{config.tituloLoja}</h2>
+          <p className="secao-sub">{config.subtituloLoja}</p>
 
           <ProductGrid produtos={produtos} corDestaque={config.corDestaque} />
         </div>

@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+﻿import { redirect } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import MinhaConta from "@/components/MinhaConta";
 import { getSiteConfig } from "@/lib/config";
@@ -54,6 +54,7 @@ export default async function MinhaContaPage() {
       <Navbar
         titulo={config.tituloSite}
         corDestaque={config.corDestaque}
+        logo={config.logoImagem} 
         usuarioNome={usuario.nome}
         usuarioNivel={usuario.nivel}
       />

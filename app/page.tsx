@@ -13,6 +13,7 @@ export default async function Home() {
       <Navbar
         titulo={config.tituloSite}
         corDestaque={config.corDestaque}
+        logo={config.logoImagem}
         usuarioNome={usuario?.nome}
         usuarioNivel={usuario?.nivel}
       />

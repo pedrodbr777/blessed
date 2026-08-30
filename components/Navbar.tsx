@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import Link from "next/link";
@@ -9,11 +9,12 @@ import SairButton from "@/components/SairButton";
 interface NavbarProps {
   titulo: string;
   corDestaque: string;
+  logo?: string;
   usuarioNome?: string;
   usuarioNivel?: string;
 }
 
-export default function Navbar({ titulo, corDestaque, usuarioNome, usuarioNivel }: NavbarProps) {
+export default function Navbar({ titulo, corDestaque, logo, usuarioNome, usuarioNivel }: NavbarProps) {
   const { quantidadeTotal, abrir } = useCarrinho();
   const [menuAberto, setMenuAberto] = useState(false);
   const ehAdmin = usuarioNivel === "admin" || usuarioNivel === "dev";
@@ -28,10 +29,19 @@ export default function Navbar({ titulo, corDestaque, usuarioNome, usuarioNivel 
       <nav className="navbar">
         <div className="container navbar-inner">
           <Link href="/" className="navbar-logo" style={{ color: corDestaque }} onClick={fechar}>
-            {titulo}
+            {logo ? (
+              <span style={{ display: "inline-flex", alignItems: "center", gap: "10px" }}>
+                <img
+                  src={logo}
+                  alt={titulo}
+                  style={{ height: "34px", maxWidth: "160px", objectFit: "contain" }}
+                />
+              </span>
+            ) : (
+              titulo
+            )}
           </Link>
 
-          {/* Botão menu hambúrguer (só mobile) */}
           <button
             className="navbar-hamburguer"
             onClick={() => setMenuAberto(!menuAberto)}
@@ -43,7 +53,6 @@ export default function Navbar({ titulo, corDestaque, usuarioNome, usuarioNivel 
             <span className={menuAberto ? "hamburguer-line linha-ativa" : "hamburguer-line"}></span>
           </button>
 
-          {/* Links desktop */}
           <div className="navbar-links">
             <Link href="/" onClick={fechar}>Início</Link>
             <Link href="/produtos" onClick={fechar}>Loja</Link>
@@ -73,7 +82,6 @@ export default function Navbar({ titulo, corDestaque, usuarioNome, usuarioNivel 
           </div>
         </div>
 
-        {/* Menu mobile */}
         {menuAberto && (
           <div className="navbar-menu-mobile">
             <Link href="/" onClick={fechar}>🏠 Início</Link>
