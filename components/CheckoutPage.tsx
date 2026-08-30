@@ -200,26 +200,11 @@ export default function CheckoutPage({ config, pagamentoAtivo }: Props) {
           ) : (
             <>
               <h3 style={{ marginBottom: "10px" }}>Pagamento</h3>
-              <p style={{ color: "#888", fontSize: "0.95rem", marginBottom: "14px" }}>
-                ⚠️ O pagamento online ainda não está configurado. Seu pedido será
-                registrado e o pagamento combinado por outro canal.
+              <p style={{ color: "#c0392b", fontSize: "0.95rem", marginBottom: "14px" }}>
+                ⚠️ O pagamento online ainda não está configurado. Por enquanto o
+                site não aceita pedidos. Configure a chave de pagamento para
+                liberar as vendas.
               </p>
-              <button
-                onClick={finalizar}
-                disabled={enviando}
-                style={{
-                  width: "100%",
-                  padding: "15px",
-                  border: "none",
-                  borderRadius: "10px",
-                  background: config.corDestaque,
-                  color: "#111",
-                  fontWeight: 800,
-                  fontSize: "1rem",
-                }}
-              >
-                {enviando ? "Processando..." : "Confirmar pedido"}
-              </button>
             </>
           )}
         </div>
@@ -273,22 +258,6 @@ function StripeCheckoutBox({
       <>
         <h3 style={{ marginBottom: "10px" }}>Pagamento</h3>
         <p style={{ color: "#c0392b" }}>{erro || "Pagamento indisponível no momento."}</p>
-        <button
-          onClick={onPago}
-          style={{
-            width: "100%",
-            marginTop: "14px",
-            padding: "15px",
-            border: "none",
-            borderRadius: "10px",
-            background: "#0f0f0f",
-            color: "#fff",
-            fontWeight: 800,
-            fontSize: "1rem",
-          }}
-        >
-          Confirmar pedido (pagamento à combinar)
-        </button>
       </>
     );
   }

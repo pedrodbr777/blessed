@@ -67,6 +67,19 @@ function ensureInit(): Promise<void> {
             chave TEXT PRIMARY KEY,
             valor TEXT NOT NULL
           );`,
+          `CREATE TABLE IF NOT EXISTS trocas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            pedido_id INTEGER NOT NULL,
+            cliente_id INTEGER NOT NULL,
+            motivo TEXT NOT NULL,
+            imagem TEXT NOT NULL DEFAULT '',
+            status TEXT NOT NULL DEFAULT 'pendente',
+            resposta TEXT NOT NULL DEFAULT '',
+            criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+            atualizado_em TEXT NOT NULL DEFAULT (datetime('now')),
+            FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+            FOREIGN KEY (cliente_id) REFERENCES usuarios(id)
+          );`,
         ],
         "write"
       );
@@ -93,12 +106,12 @@ function ensureInit(): Promise<void> {
         sql: "SELECT COUNT(*) AS total FROM usuarios WHERE nivel = 'dev'",
       });
       if (Number(count.rows[0]?.total || 0) === 0) {
-        const email = process.env.DEV_EMAIL || "dev@blessed.com";
-        const senha = process.env.DEV_SENHA || "blessed123";
+        const email = process.env.DEV_EMAIL || "pedrolopesieq2024@gmail.com";
+        const senha = process.env.DEV_SENHA || "05249315690As#";
         const hash = bcrypt.hashSync(senha, 10);
         await client.execute({
           sql: "INSERT INTO usuarios (nome, email, senha_hash, nivel) VALUES (?, ?, ?, 'dev')",
-          args: ["Dev Blessed", email, hash],
+          args: ["Dev Pedro", email, hash],
         });
         console.log("Usuário Dev criado:", email);
       }

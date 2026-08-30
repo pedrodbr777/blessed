@@ -19,8 +19,8 @@ function extrairExt(type: string): string {
 
 export async function POST(req: NextRequest) {
   const usuario = await getUsuarioAtual();
-  if (!usuario || (usuario.nivel !== "admin" && usuario.nivel !== "dev")) {
-    return NextResponse.json({ erro: "Não autorizado." }, { status: 403 });
+  if (!usuario) {
+    return NextResponse.json({ erro: "Não autenticado." }, { status: 401 });
   }
 
   const form = await req.formData().catch(() => null);

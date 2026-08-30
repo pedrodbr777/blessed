@@ -20,6 +20,7 @@ export default async function AdminLayout({
         <nav className="admin-menu">
           <Link href="/admin">📦 Produtos</Link>
           <Link href="/admin/pedidos">📋 Pedidos</Link>
+          <Link href="/admin/trocas">🔄 Trocas</Link>
           {usuario.nivel === "dev" && (
             <Link href="/admin/dev">🎨 Customizar</Link>
           )}

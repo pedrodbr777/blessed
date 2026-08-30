@@ -80,6 +80,19 @@ async function main() {
       chave TEXT PRIMARY KEY,
       valor TEXT NOT NULL
     );`,
+    `CREATE TABLE IF NOT EXISTS trocas (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      pedido_id INTEGER NOT NULL,
+      cliente_id INTEGER NOT NULL,
+      motivo TEXT NOT NULL,
+      imagem TEXT NOT NULL DEFAULT '',
+      status TEXT NOT NULL DEFAULT 'pendente',
+      resposta TEXT NOT NULL DEFAULT '',
+      criado_em TEXT NOT NULL DEFAULT (datetime('now')),
+      atualizado_em TEXT NOT NULL DEFAULT (datetime('now')),
+      FOREIGN KEY (pedido_id) REFERENCES pedidos(id),
+      FOREIGN KEY (cliente_id) REFERENCES usuarios(id)
+    );`,
   ];
   await remoto.batch(schema, "write");
   console.log("Tabelas criadas no banco remoto.");
@@ -144,6 +157,19 @@ async function main() {
     });
   }
   console.log("Configurações copiadas.");
+
+  // Trocas
+  const trocas = local.prepare("SELECT * FROM trocas").all();
+  for (const t of trocas) {
+    const existe = await remoto.execute({ sql: "SELECT id FROM trocas WHERE id = ?", args: [t.id] });
+    if (existe.rows.length === 0) {
+      await remoto.execute({
+        sql: "INSERT INTO trocas (id, pedido_id, cliente_id, motivo, imagem, status, resposta, criado_em, atualizado_em) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        args: [t.id, t.pedido_id, t.cliente_id, t.motivo, t.imagem, t.status, t.resposta, t.criado_em, t.atualizado_em],
+      });
+      console.log("  + troca #" + t.id);
+    }
+  }
 
   console.log("\nMigração concluída com sucesso!");
 }

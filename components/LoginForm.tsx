@@ -64,6 +64,11 @@ export default function LoginForm() {
       <button type="submit" style={botaoStyle}>
         Entrar
       </button>
+      <p style={{ textAlign: "center", fontSize: "0.9rem" }}>
+        <Link href="/esqueci-senha" style={{ color: "#888" }}>
+          Esqueci minha senha
+        </Link>
+      </p>
       <p style={{ textAlign: "center", marginTop: "6px", color: "#888" }}>
         Ainda não tem conta?{" "}
         <Link href="/cadastro" style={{ color: "#111", fontWeight: 700 }}>

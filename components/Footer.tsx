@@ -49,7 +49,7 @@ export default async function Footer() {
           <div style={{ fontWeight: 700, marginBottom: "10px" }}>Formas de pagamento</div>
           <p style={{ opacity: 0.8, fontSize: "0.92rem", lineHeight: 1.8 }}>
             PIX · Cartão de crédito<br />
-            Boleto · Pagamento à combinar
+            Boleto
           </p>
         </div>
       </div>

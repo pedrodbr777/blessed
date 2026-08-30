@@ -3,10 +3,23 @@ import "./globals.css";
 import { getSiteConfig } from "@/lib/config";
 import Providers from "@/components/Providers";
 import Footer from "@/components/Footer";
+import PwaRegistrar from "@/components/PwaRegistrar";
 
 export const metadata: Metadata = {
   title: "Blessed",
   description: "Loja Blessed - Moda e atitude",
+  manifest: "/manifest.webmanifest",
+  applicationName: "Blessed",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Blessed",
+  },
+  icons: {
+    icon: "/icon-192.png",
+    apple: "/apple-touch-icon.png",
+    shortcut: "/icon-192.png",
+  },
 };
 
 export const dynamic = "force-dynamic";
@@ -34,6 +47,7 @@ export default async function RootLayout({
       </head>
       <body>
         <Providers>{children}</Providers>
+        <PwaRegistrar />
         <Footer />
       </body>
     </html>

@@ -56,7 +56,9 @@ export default function Navbar({ titulo, corDestaque, usuarioNome, usuarioNivel 
             {ehDev && <Link href="/admin/dev" onClick={fechar}>Customizar</Link>}
             {usuarioNome ? (
               <>
-                <span style={{ opacity: 0.9, fontSize: "0.9rem" }}>Olá, {usuarioNome}</span>
+                <Link href="/minha-conta" onClick={fechar} style={{ opacity: 0.9, fontSize: "0.9rem" }}>
+                  Olá, {usuarioNome}
+                </Link>
                 <SairButton />
               </>
             ) : (
@@ -86,7 +88,7 @@ export default function Navbar({ titulo, corDestaque, usuarioNome, usuarioNivel 
             <div className="navbar-menu-mobile-sep"></div>
             {usuarioNome ? (
               <>
-                <span className="navbar-menu-mobile-ola">Olá, {usuarioNome}</span>
+                <Link href="/minha-conta" onClick={fechar}>👤 Minha conta</Link>
                 <div onClick={fechar}>
                   <SairButton />
                 </div>
