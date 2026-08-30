@@ -1,19 +1,20 @@
-import { createClient, type Client, type InValue } from "@libsql/client";
+import { createClient, type InValue } from "@libsql/client/http";
+import type { Client } from "@libsql/client";
 import path from "node:path";
 import fs from "node:fs";
 import bcrypt from "bcryptjs";
 
-const TURSO_URL = process.env.TURSO_DATABASE_URL;
-const TURSO_TOKEN = process.env.TURSO_AUTH_TOKEN;
+const TURSO_URL = (process.env.TURSO_DATABASE_URL || "").trim();
+const TURSO_TOKEN = (process.env.TURSO_AUTH_TOKEN || "").trim();
 
-export const isCloud = Boolean(TURSO_URL);
+export const isCloud = TURSO_URL.startsWith("http") || TURSO_URL.startsWith("libsql");
 
 const dataDir = path.join(process.cwd(), "data");
 fs.mkdirSync(dataDir, { recursive: true });
 export const dbPath = path.join(dataDir, "blessed.db");
 
 const client: Client = isCloud
-  ? createClient({ url: TURSO_URL!, authToken: TURSO_TOKEN })
+  ? createClient({ url: TURSO_URL, authToken: TURSO_TOKEN })
   : createClient({ url: `file:${dbPath}` });
 
 let initPromise: Promise<void> | null = null;

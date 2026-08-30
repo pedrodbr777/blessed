@@ -44,3 +44,6 @@ next-env.d.ts
 devlog.txt
 tmp/
 *.tmp
+
+.vercel
+.env*
