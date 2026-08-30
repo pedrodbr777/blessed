@@ -21,7 +21,7 @@ const labelStyle: React.CSSProperties = {
 };
 
 export default async function AdminPage() {
-  await exigeNivel(["admin", "dev"]);
+  await exigeNivel(["admin", "admin_master", "dev"]);
 
   const produtos = (await db.all("SELECT * FROM produtos ORDER BY id DESC")) as unknown as ProdutoAdmin[];
 

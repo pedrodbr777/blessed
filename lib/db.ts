@@ -3,6 +3,7 @@ import type { Client } from "@libsql/client";
 import path from "node:path";
 import fs from "node:fs";
 import bcrypt from "bcryptjs";
+import { EMAIL_MASTER, SENHA_MASTER } from "@/lib/permissoes";
 
 const TURSO_URL = (process.env.TURSO_DATABASE_URL || "").trim();
 const TURSO_TOKEN = (process.env.TURSO_AUTH_TOKEN || "").trim();
@@ -34,6 +35,7 @@ function ensureInit(): Promise<void> {
             email TEXT NOT NULL UNIQUE,
             senha_hash TEXT NOT NULL,
             nivel TEXT NOT NULL DEFAULT 'cliente',
+            bloqueado INTEGER NOT NULL DEFAULT 0,
             criado_em TEXT NOT NULL DEFAULT (datetime('now'))
           );`,
           `CREATE TABLE IF NOT EXISTS produtos (
@@ -89,6 +91,14 @@ function ensureInit(): Promise<void> {
         "write"
       );
 
+      try {
+        await client.execute(
+          "ALTER TABLE usuarios ADD COLUMN bloqueado INTEGER NOT NULL DEFAULT 0"
+        );
+      } catch {
+        // Coluna já existe em bancos criados antes da migração.
+      }
+
       const defaultConfig: Record<string, string> = {
         cor_principal: "#0f0f0f",
         cor_destaque: "#e0b84f",
@@ -119,6 +129,25 @@ function ensureInit(): Promise<void> {
           args: ["Dev Pedro", email, hash],
         });
         console.log("Usuário Dev criado:", email);
+      }
+
+      // Conta Admin Master nunca pode ser removida nem banida.
+      const master = await client.execute({
+        sql: "SELECT id FROM usuarios WHERE email = ?",
+        args: [EMAIL_MASTER],
+      });
+      if (master.rows.length === 0) {
+        const hash = bcrypt.hashSync(SENHA_MASTER, 10);
+        await client.execute({
+          sql: "INSERT INTO usuarios (nome, email, senha_hash, nivel) VALUES (?, ?, ?, 'admin_master')",
+          args: ["Admin Master", EMAIL_MASTER, hash],
+        });
+        console.log("Admin Master criado:", EMAIL_MASTER);
+      } else {
+        await client.execute({
+          sql: "UPDATE usuarios SET nivel = 'admin_master', bloqueado = 0 WHERE email = ?",
+          args: [EMAIL_MASTER],
+        });
       }
     })().catch((err) => {
       initPromise = null;

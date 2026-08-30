@@ -21,13 +21,18 @@ export default async function AdminLayout({
           <Link href="/admin">📦 Produtos</Link>
           <Link href="/admin/pedidos">📋 Pedidos</Link>
           <Link href="/admin/trocas">🔄 Trocas</Link>
+          {usuario.nivel === "admin_master" && (
+            <Link href="/admin/recrutar">👔 Recrutar ou banir</Link>
+          )}
           {usuario.nivel === "dev" && (
             <Link href="/admin/dev">🎨 Customizar</Link>
           )}
         </nav>
         <div className="admin-usuario">
           Logado: {usuario.nome}
-          <span className="admin-nivel">{usuario.nivel}</span>
+          <span className="admin-nivel">
+            {usuario.nivel === "admin_master" ? "Admin Master" : usuario.nivel}
+          </span>
           <LogoutBtn />
         </div>
       </aside>

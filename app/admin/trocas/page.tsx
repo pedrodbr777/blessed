@@ -164,7 +164,7 @@ async function TrocaCard({ troca, cliente }: { troca: Troca; cliente: Cliente })
 }
 
 export default async function TrocasPage() {
-  await exigeNivel(["admin", "dev"]);
+  await exigeNivel(["admin", "admin_master", "dev"]);
 
   const trocas = (await db.all(
     "SELECT * FROM trocas ORDER BY id DESC"

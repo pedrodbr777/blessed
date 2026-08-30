@@ -3,15 +3,17 @@ import { cookies } from "next/headers";
 import { db } from "@/lib/db";
 import bcrypt from "bcryptjs";
 
-const SECRET = new TextEncoder().encode(
+export const SECRET = new TextEncoder().encode(
   process.env.SECRETO_SESSAO || "blessed-dev-segredo-mudar-em-producao"
 );
+
+export type Nivel = "cliente" | "admin" | "admin_master" | "dev";
 
 export interface UsuarioSessao {
   id: number;
   nome: string;
   email: string;
-  nivel: "cliente" | "admin" | "dev";
+  nivel: Nivel;
 }
 
 const COOKIE_NOME = "blessed_sessao";
@@ -46,7 +48,7 @@ export async function getUsuarioAtual(): Promise<UsuarioSessao | null> {
     const { payload } = await jwtVerify(token, SECRET);
     const id = Number(payload.id);
     const row = await db.get<{ id: number; nome: string; email: string; nivel: string }>(
-      "SELECT id, nome, email, nivel FROM usuarios WHERE id = ?",
+      "SELECT id, nome, email, nivel FROM usuarios WHERE id = ? AND bloqueado = 0",
       id
     );
     if (!row) return null;
@@ -54,7 +56,7 @@ export async function getUsuarioAtual(): Promise<UsuarioSessao | null> {
       id: row.id,
       nome: row.nome,
       email: row.email,
-      nivel: row.nivel as UsuarioSessao["nivel"],
+      nivel: row.nivel as Nivel,
     };
   } catch {
     return null;

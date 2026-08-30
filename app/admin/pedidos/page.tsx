@@ -130,7 +130,7 @@ async function PedidoCard({ pedido }: { pedido: Pedido }) {
 }
 
 export default async function PedidosPage() {
-  await exigeNivel(["admin", "dev"]);
+  await exigeNivel(["admin", "admin_master", "dev"]);
 
   const pedidos = (await db.all(
     "SELECT * FROM pedidos ORDER BY id DESC"

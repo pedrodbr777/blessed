@@ -17,7 +17,8 @@ interface NavbarProps {
 export default function Navbar({ titulo, corDestaque, logo, usuarioNome, usuarioNivel }: NavbarProps) {
   const { quantidadeTotal, abrir } = useCarrinho();
   const [menuAberto, setMenuAberto] = useState(false);
-  const ehAdmin = usuarioNivel === "admin" || usuarioNivel === "dev";
+  const ehAdmin =
+    usuarioNivel === "admin" || usuarioNivel === "admin_master" || usuarioNivel === "dev";
   const ehDev = usuarioNivel === "dev";
 
   function fechar() {

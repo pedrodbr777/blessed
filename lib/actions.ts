@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { db } from "@/lib/db";
 import { criarSessao, verificarSenha } from "@/lib/auth";
+import { EMAIL_MASTER } from "@/lib/permissoes";
 import bcrypt from "bcryptjs";
 
 export interface FormState {
@@ -26,10 +27,26 @@ export async function loginAction(
     nome: string;
     email: string;
     senha_hash: string;
-  }>("SELECT id, nome, email, senha_hash FROM usuarios WHERE email = ?", email);
+    bloqueado: number;
+  }>(
+    "SELECT id, nome, email, senha_hash, bloqueado FROM usuarios WHERE email = ?",
+    email
+  );
 
   if (!row || !verificarSenha(senha, row.senha_hash)) {
     return { erro: "Email ou senha incorretos." };
+  }
+
+  // Conta master nunca pode ficar bloqueada nem perder o nível.
+  if (row.email === EMAIL_MASTER) {
+    await db.run(
+      "UPDATE usuarios SET nivel = 'admin_master', bloqueado = 0 WHERE id = ?",
+      row.id
+    );
+  }
+
+  if (row.bloqueado === 1) {
+    redirect("/banido");
   }
 
   await criarSessao(row.id);
