@@ -20,6 +20,7 @@
     "react-dom": "^19.0.0",
     "react-easy-crop": "^6.2.3",
     "resend": "^6.25.0",
+    "sharp": "^0.35.4",
     "stripe": "^22.6.0"
   },
   "devDependencies": {

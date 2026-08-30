@@ -5,22 +5,26 @@ import Providers from "@/components/Providers";
 import Footer from "@/components/Footer";
 import PwaRegistrar from "@/components/PwaRegistrar";
 
-export const metadata: Metadata = {
-  title: "Blessed",
-  description: "Loja Blessed - Moda e atitude",
-  manifest: "/manifest.webmanifest",
-  applicationName: "Blessed",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "Blessed",
-  },
-  icons: {
-    icon: "/icon-192.png",
-    apple: "/apple-touch-icon.png",
-    shortcut: "/icon-192.png",
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getSiteConfig();
+  const temIcone = Boolean(config.appIcone);
+  return {
+    title: config.tituloSite,
+    description: `Loja ${config.tituloSite} - ${config.slogan}`,
+    manifest: "/manifest.webmanifest",
+    applicationName: config.tituloSite,
+    appleWebApp: {
+      capable: true,
+      statusBarStyle: "default",
+      title: config.tituloSite,
+    },
+    icons: {
+      icon: temIcone ? "/api/icone?t=192" : "/icon-192.png",
+      apple: temIcone ? "/api/icone?t=180" : "/apple-touch-icon.png",
+      shortcut: temIcone ? "/api/icone?t=192" : "/icon-192.png",
+    },
+  };
+}
 
 export const dynamic = "force-dynamic";
 

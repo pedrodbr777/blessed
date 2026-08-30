@@ -1,9 +1,8 @@
-const CACHE = "blessed-v2";
+const CACHE = "blessed-v3";
 const ASSETS = [
   "/icon-192.png",
   "/icon-512.png",
   "/apple-touch-icon.png",
-  "/manifest.webmanifest",
 ];
 
 self.addEventListener("install", (event) => {
@@ -31,6 +30,7 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== location.origin) return;
   if (url.pathname.startsWith("/api/")) return;
+  if (url.pathname === "/manifest.webmanifest") return;
 
   // NÃO cachear páginas HTML (são dinâmicas) — só arquivos estáticos.
   const isPage = request.headers.get("accept")?.includes("text/html");

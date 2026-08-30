@@ -10,8 +10,9 @@ export interface SiteConfig {
   slogan: string;
   tituloLoja: string;
   subtituloLoja: string;
-  rodapeTexto: string;
+rodapeTexto: string;
   logoImagem: string;
+  appIcone: string;
   bannerImagem: string;
   bannerTexto: string;
   bannerLink: string;
@@ -39,7 +40,8 @@ export async function getSiteConfig(): Promise<SiteConfig> {
     tituloLoja: map["titulo_loja"] || "Nossa Loja",
     subtituloLoja: map["subtitulo_loja"] || "Escolha a peça que combina com você",
     rodapeTexto: map["rodape_texto"] || "Blessed © Todos os direitos reservados.",
-    logoImagem: map["logo_imagem"] || "",
+logoImagem: map["logo_imagem"] || "",
+    appIcone: map["app_icone"] || "",
     bannerImagem: map["banner_imagem"] || "",
     bannerTexto: map["banner_texto"] || "Ver a Loja",
     bannerLink: map["banner_link"] || "/produtos",

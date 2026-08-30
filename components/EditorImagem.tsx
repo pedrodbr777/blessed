@@ -9,9 +9,20 @@ interface Props {
   onCancelar: () => void;
   onSalvar: (blob: Blob) => void;
   rotulo?: string;
+  aspecto?: number;
+  tamanhoSaida?: number;
+  formato?: "jpeg" | "png";
 }
 
-export default function EditorImagem({ arquivo, onCancelar, onSalvar, rotulo = "Ajustar imagem" }: Props) {
+export default function EditorImagem({
+  arquivo,
+  onCancelar,
+  onSalvar,
+  rotulo = "Ajustar imagem",
+  aspecto = 4 / 4,
+  tamanhoSaida,
+  formato = "jpeg",
+}: Props) {
   const src = useMemo(() => URL.createObjectURL(arquivo), [arquivo]);
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -40,15 +51,28 @@ export default function EditorImagem({ arquivo, onCancelar, onSalvar, rotulo = "
       ctx.rotate((rotacao * Math.PI) / 180);
       ctx.drawImage(image, -image.naturalWidth / 2, -image.naturalHeight / 2);
 
-      const saidaCanvas = document.createElement("canvas");
+const saidaCanvas = document.createElement("canvas");
       saidaCanvas.width = area.width;
       saidaCanvas.height = area.height;
       const sctx = saidaCanvas.getContext("2d");
       if (!sctx) throw new Error("Sem contexto de saída");
       sctx.drawImage(canvas, area.x, area.y, area.width, area.height, 0, 0, area.width, area.height);
 
+      let finalCanvas = saidaCanvas;
+      if (tamanhoSaida) {
+        finalCanvas = document.createElement("canvas");
+        finalCanvas.width = tamanhoSaida;
+        finalCanvas.height = tamanhoSaida;
+        const fctx = finalCanvas.getContext("2d");
+        if (!fctx) throw new Error("Sem contexto final");
+        fctx.imageSmoothingEnabled = true;
+        fctx.imageSmoothingQuality = "high";
+        fctx.drawImage(saidaCanvas, 0, 0, area.width, area.height, 0, 0, tamanhoSaida, tamanhoSaida);
+      }
+
+      const mime = formato === "png" ? "image/png" : "image/jpeg";
       const blob = await new Promise<Blob | null>((resolve) => {
-        saidaCanvas.toBlob((b) => resolve(b), "image/jpeg", 0.9);
+        finalCanvas.toBlob((b) => resolve(b), mime, formato === "png" ? undefined : 0.9);
       });
       if (!blob) throw new Error("Falha ao gerar imagem");
       onSalvar(blob);
@@ -77,7 +101,7 @@ export default function EditorImagem({ arquivo, onCancelar, onSalvar, rotulo = "
       </div>
 
       <div style={{ position: "relative", flex: 1, minHeight: 0 }}>
-        <Cropper image={src} crop={crop} zoom={zoom} rotation={rotacao} aspect={4 / 4} onCropChange={setCrop} onZoomChange={setZoom} onRotationChange={setRotacao} onCropComplete={onCropComplete} />
+        <Cropper image={src} crop={crop} zoom={zoom} rotation={rotacao} aspect={aspecto} onCropChange={setCrop} onZoomChange={setZoom} onRotationChange={setRotacao} onCropComplete={onCropComplete} />
       </div>
 
       <div style={{ padding: "12px 0", color: "#fff", display: "flex", flexDirection: "column", gap: "8px" }}>

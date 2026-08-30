@@ -3,6 +3,7 @@ import { salvarConfig } from "@/lib/acoesConfig";
 import { exigeNivel } from "@/lib/protecao";
 import BannerUpload from "@/components/BannerUpload";
 import LogoUpload from "@/components/LogoUpload";
+import IconeUpload from "@/components/IconeUpload";
 import { list } from "@vercel/blob";
 import fs from "node:fs";
 import path from "node:path";
@@ -82,9 +83,14 @@ export default async function DevPage() {
           gap: "18px",
         }}
       >
-        <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
+<div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
           <span style={labelStyle}>Logo da marca (aparece no topo do site)</span>
           <LogoUpload logoAtual={config.logoImagem} />
+        </div>
+
+        <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
+          <span style={labelStyle}>Ícone do app (aparece no celular, quando instala o site)</span>
+          <IconeUpload iconeAtual={config.appIcone} />
         </div>
 
         <div style={{ ...campoStyle, gridColumn: "1 / -1" }}>
