@@ -1,9 +1,11 @@
 ﻿import { getSiteConfig } from "@/lib/config";
 import { salvarConfig } from "@/lib/acoesConfig";
 import { exigeNivel } from "@/lib/protecao";
+import { db } from "@/lib/db";
 import BannerUpload from "@/components/BannerUpload";
 import LogoUpload from "@/components/LogoUpload";
 import IconeUpload from "@/components/IconeUpload";
+import BuscaProduto, { type ProdutoAdmin } from "@/components/BuscaProduto";
 import { list } from "@vercel/blob";
 import fs from "node:fs";
 import path from "node:path";
@@ -39,8 +41,9 @@ const campoStyle: React.CSSProperties = {
 };
 
 export default async function DevPage() {
-  await exigeNivel(["dev"]);
+await exigeNivel(["dev"]);
   const config = await getSiteConfig();
+  const produtos = (await db.all("SELECT * FROM produtos ORDER BY id DESC")) as unknown as ProdutoAdmin[];
 
   let imagens: string[] = [];
 
@@ -67,9 +70,27 @@ export default async function DevPage() {
   return (
     <div>
       <h1 style={{ marginBottom: "8px" }}>Customização do site</h1>
-      <p style={{ color: "#888", marginBottom: "24px" }}>
+<p style={{ color: "#888", marginBottom: "24px" }}>
         As alterações aqui aparecem na hora no site da loja.
       </p>
+
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: "14px",
+          padding: "20px",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
+          marginBottom: "24px",
+        }}
+      >
+        <h2 style={{ fontSize: "1.1rem", marginBottom: "12px" }}>
+          🔍 Procurar produto
+        </h2>
+        <p style={{ color: "#888", fontSize: "0.9rem", marginBottom: "14px" }}>
+          Encontre um produto pelo nome ou categoria e vá direto para a edição.
+        </p>
+        <BuscaProduto produtos={produtos} linkMode />
+      </div>
 
       <form
         action={salvarConfig}
